@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+    function init(){
+        outputElem = document.getElementById("output");
+        arSmartTV.init(initSuccessful,initFail);
+    }
+    function initSuccessful(){
+        arSmartTV.addEventListener("EV_SEND_PIXAGE_GENERIC_EVENT", handleIncomingEvent);
+        outputElem.innerHTML="SDK init successful. Please select an operation";
+    }
+    function initFail(){ 
+        outputElem.innerHTML="SDK init failed! You cannot use any function";
+    }
+	function eventWithCallbackDemowritefile(wrfpath,selectwr,wrdatav){
+        var msgObj = new Object();
+		msgObj.command = "bWriteFile";
+		msgObj.payload = new Object();
+		msgObj.payload.FileNameAndPath =wrfpath;
+		msgObj.payload.Append =selectwr;
+		msgObj.payload.Data =wrdatav;
+		
+        var response = arSmartTV.sendPixageRequest(msgObj);
+
+        outputElem.innerHTML="request response is received: " + response;
+   }
+    function handleIncomingEvent(msg) {
+        outputElem.innerHTML = "An event is received from TV: " + msg;
+    }    
+    function dummyCallback(msg){
+        outputElem.innerHTML = "event response received (success callback): " + msg;
+    }
+    function dummyCallbackErr(msg){
+        outputElem.innerHTML = "event response received (failure callback): " + msg;
+    }
+	function session(){
+		var str=document.getElementById("adsoyad").value+" - "+document.getElementById("email").value;
+		sessionStorage.setItem("tempLogin", str);
+		eventWithCallbackDemowritefile("/Customer/usb/sda1/testproject/log.txt","NOTAPPEND",str);
+	}
+	</script>
+	<style type="text/css">
+	 body, html{
+		height: 100%;
+        margin: 0;
+	 }
+	 .bg {
+		background-image: url("img/arcelik.jpg");
+		height: 90%; 
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+	 }
+	 #textcenter {
+		margin-top:200px;
+		text-align: center;
+	 }
+	 #form{
+		margin-left:253px;
+		margin-top:40px;
+	 }
+	 #start{
+		margin-left:273px;
+		margin-top:40px;
+    }
+	.btn-success{
+		width:300px;
+		height:50px;
+	}
+	a{
+		color:white;
+	}
+	</style>
+  </head>
+	<body onload="init();" class="bg">
+	<div class="container">
+	  <h1 id="textcenter">DS API LIST</h1>
+	  <form class="form-horizontal" action="">
+	    <div class="form-group" id="form">
+		  <label class="control-label col-sm-2" for="text">Name:</label>
+		  <div class="col-sm-5">          
+			<input type="text" class="form-control" id="adsoyad" placeholder="Enter your name and surname" name="text">
+		  </div>
+		</div>
+		<div class="form-group" id="form">
+		  <label class="control-label col-sm-2" for="email">Email:</label>
+		  <div class="col-sm-5">
+			<input type="email" class="form-control" id="email" placeholder="Enter your e-mail address" name="email">
+		  </div>
+		</div>
+		<div class="form-group" id="start">        
+		  <div class="col-sm-offset-2 col-sm-10">
+			<button class="btn btn-success" onclick="session();"><a href="System.html">START!</a></button>  
+		  </div>
+		</div>
+	  </form>
+	</div>
+</body>
+</html>
+

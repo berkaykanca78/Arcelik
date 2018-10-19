@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+   function init(){
+	var login= sessionStorage.getItem("tempLogin");
+	    document.getElementById("result0").innerHTML=login;
+		var sys = sessionStorage.getItem("tempSYS");
+		if(sys=="OK"){
+		 		document.getElementById("result1").innerHTML="1 OK";
+		}
+		else if(sys=="NOTOK"){
+		 		document.getElementById("result1").innerHTML="1 NOT OK";
+		}
+		var cpu = sessionStorage.getItem("tempCPU");
+		if(cpu=="OK"){
+		 		document.getElementById("result2").innerHTML="2 OK";
+		}
+		else if(cpu=="NOTOK"){
+		 		document.getElementById("result2").innerHTML="2 NOT OK";
+		}
+		var path = sessionStorage.getItem("tempStoragePath");
+		if(path=="OK"){
+		  document.getElementById("result3").innerHTML="3 OK";
+		}
+		else if(path=="NOTOK"){
+		 		document.getElementById("result3").innerHTML="3 NOT OK";
+		}
+		var usb= sessionStorage.getItem("tempUSB");
+		var usb2= sessionStorage.getItem("tempUSB2");
+		if(usb=="OK" && usb2=="OK2"){
+		  document.getElementById("result4").innerHTML="4 OK";
+		}
+		else if(usb=="NOTOK" || usb2=="NOTOK2"){
+		  document.getElementById("result4").innerHTML="4 NOT OK";
+		}
+		var size=sessionStorage.getItem("tempStorageSize");
+		if(size=="OK"){
+		  document.getElementById("result5").innerHTML="5 OK";
+		}
+		else if(size=="NOTOK"){
+		  document.getElementById("result5").innerHTML="5 NOT OK";
+		}
+		var check=sessionStorage.getItem("tempFileCheck");
+		if(check=="OK")
+		{
+		  document.getElementById("result6").innerHTML="6 OK";
+		}
+		else if(check=="NOTOK")
+		{
+		  document.getElementById("result6").innerHTML="6 NOT OK";
+		}
+		var check2=sessionStorage.getItem("temp2FileCheck");
+		if(check2=="OK")
+		{
+		  document.getElementById("result7").innerHTML="7 OK";
+		}
+		else if(check2=="NOTOK")
+		{
+		  document.getElementById("result7").innerHTML="7 NOT OK";
+		}
+		var size2=sessionStorage.getItem("temp2StorageSize");
+		if(size2=="OK")
+		{
+		  document.getElementById("result8").innerHTML="8 OK";
+		}
+		else if(size2=="NOTOK")
+		{
+		  document.getElementById("result8").innerHTML="8 NOT OK";
+		}
+		var operations=sessionStorage.getItem("tempFileOperations");
+		if(operations=="OK")
+		{
+		  document.getElementById("result9").innerHTML="9 OK";
+		}
+		else if(operations=="NOTOK")
+		{
+		  document.getElementById("result9").innerHTML="9 NOT OK";
+		}
+		var tvinfo=sessionStorage.getItem("tempTVInfo");
+		if(tvinfo=="OK")
+		{
+		  document.getElementById("result10").innerHTML="10 OK";
+		}
+		else if(tvinfo=="NOTOK")
+		{
+		  document.getElementById("result10").innerHTML="10 NOT OK";	
+		}
+		var tvtime=sessionStorage.getItem("tempTVTime");
+		if(tvtime=="OK")
+		{
+		  document.getElementById("result11").innerHTML="11 OK";
+		}
+		else if(tvtime=="NOTOK")
+		{
+		  document.getElementById("result11").innerHTML="11 NOT OK";	
+		}
+		var tvvolume=sessionStorage.getItem("tempTVVolume");
+		if(tvvolume=="OK")
+		{
+		  document.getElementById("result12").innerHTML="12 OK";	
+		}
+		else if(tvvolume=="NOTOK")
+		{
+		  document.getElementById("result12").innerHTML="12 NOT OK";	
+		}
+		var tvpic=sessionStorage.getItem("tempTVPicture");
+		if(tvpic=="OK")
+		{
+		  document.getElementById("result13").innerHTML="13 OK";			
+		}
+		else if(tvpic=="NOTOK")
+        {
+		  document.getElementById("result13").innerHTML="13 NOT OK";		
+		}
+		var onoff=sessionStorage.getItem("tempOnOff");
+		if(onoff=="OK")
+		{
+		  document.getElementById("result14").innerHTML="14 OK";			
+		}
+		else if(onoff=="NOTOK")
+		{
+		  document.getElementById("result14").innerHTML="14 NOT OK";		
+		}
+        outputElem = document.getElementById("output");
+        arSmartTV.init(initSuccessful,initFail);
+    }
+    function initSuccessful(){
+        arSmartTV.addEventListener("EV_SEND_PIXAGE_GENERIC_EVENT", handleIncomingEvent);
+        outputElem.innerHTML="SDK init successful. Please select an operation";
+    }
+    function initFail(){
+        outputElem.innerHTML="SDK init failed! You cannot use any function";
+    }
+  function handleIncomingEvent(msg) {
+        outputElem.innerHTML = "An event is received from TV: " + msg;
+    }
+    function dummyCallback(msg){
+        outputElem.innerHTML = "event response received (success callback): " + msg;
+    }
+    function dummyCallbackErr(msg){
+        outputElem.innerHTML = "event response received (failure callback): " + msg;
+    }
+</script>
+<style type="text/css">
+    body{
+        background-color: white;
+    }
+#output{
+ float:center;
+}
+    .nextpage{
+        position:fixed;
+        bottom:0;
+        right:10;
+    }
+    .backpage{
+        position:fixed;
+        bottom:0;
+        left:10;
+    }
+    #textcenter {
+        text-align: center;
+    }
+    #logo {
+        text-align: right;
+    }
+	body, html{
+		height: 100%;
+        margin: 0;
+	 }
+	 .bg {
+		background-image: url("img/arcelik.jpg");
+		height: 90%; 
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+	 }
+     .btn-location{
+        margin-right: 100px;
+     }
+     .btn-top-location{
+        margin-top: 100px;
+     }
+	 .icerik{
+	 	margin-left:530px;
+		margin-top:185px;
+	}
+</style>
+</head>
+<body onload="init();" class="bg">
+<div class="container">
+<p class="icerik">
+		<label id="result0"></label><br>
+		<label id="result1"></label><br> 
+		<label id="result2"></label><br>
+		<label id="result3"></label><br>
+		<label id="result4"></label><br>
+		<label id="result5"></label><br>
+		<label id="result6"></label><br>
+		<label id="result7"></label><br>
+		<label id="result8"></label><br>
+		<label id="result9"></label><br>
+		<label id="result10"></label><br>
+		<label id="result11"></label><br>
+		<label id="result12"></label><br>
+		<label id="result13"></label><br>
+		<label id="result14"></label>
+</p>
+</div>
+</body>
+</html>

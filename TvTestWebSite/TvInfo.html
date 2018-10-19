@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+ function init(){
+        var name = sessionStorage.getItem("tempTVInfo");
+		if(name=="OK"){
+		 		renkDegistir();
+		}
+		else if(name=="NOTOK"){
+		 		varsayilanRenk();
+		}
+        outputElem = document.getElementById("output");
+        arSmartTV.init(initSuccessful,initFail);
+    }
+    function initSuccessful(){
+        arSmartTV.addEventListener("EV_SEND_PIXAGE_GENERIC_EVENT", handleIncomingEvent);
+        outputElem.innerHTML="SDK init successful. Please select an operation";
+    }
+    function initFail(){
+        outputElem.innerHTML="SDK init failed! You cannot use any function";
+    }
+
+    function eventWithCallbackSetTvname(tvname){
+        var msgObj = new Object();
+        msgObj.command = "bSetTvname";
+        msgObj.payload = new Object();
+        msgObj.payload.tvname =tvname;
+
+        var response = arSmartTV.sendPixageRequest(msgObj);
+
+        outputElem.innerHTML="request response is received: " + response;
+    }
+    function eventWithCallbackDemoGetTvname(){
+        var msgObj = Object();
+        msgObj.command = "bGetTvname";
+        var response = arSmartTV.sendPixageRequest(msgObj);
+
+        outputElem.innerHTML="request response is received: " + response;
+    } 
+	function eventWithCallbackDemowritefile(wrfpath,selectwr,wrdatav){
+        var msgObj = new Object();
+		msgObj.command = "bWriteFile";
+		msgObj.payload = new Object();
+		msgObj.payload.FileNameAndPath =wrfpath;
+		msgObj.payload.Append =selectwr;
+		msgObj.payload.Data =wrdatav;
+		
+        var response = arSmartTV.sendPixageRequest(msgObj);
+
+        outputElem.innerHTML="request response is received: " + response;
+   }
+	function handleIncomingEvent(msg) {
+        outputElem.innerHTML = "An event is received from TV: " + msg;
+    }
+    function dummyCallback(msg){
+        outputElem.innerHTML = "event response received (success callback): " + msg;
+    }
+    function dummyCallbackErr(msg){
+        outputElem.innerHTML = "event response received (failure callback): " + msg;
+    }
+	function renkDegistir()
+    {
+        document.getElementById("round").style.border="2px solid green";
+		sessionStorage.setItem("tempTVInfo", "OK");
+		eventWithCallbackDemowritefile("/Customer/usb/sda1/testproject/log.txt","APPEND","\r\n10		OK");
+    }
+	function varsayilanRenk()
+	{
+		document.getElementById("round").style.border="2px solid red";
+		sessionStorage.setItem("tempTVInfo", "NOTOK");
+		eventWithCallbackDemowritefile("/Customer/usb/sda1/testproject/log.txt","APPEND","\r\n10		NOTOK");
+	}
+</script>
+<style type="text/css">
+    body{
+        background-color: white;
+    }
+.icerik{
+    float: center;
+	text-align: center;
+}
+#output{
+ float:right;
+}
+    .nextpage{
+        position:fixed;
+        bottom:0;
+        right:10;
+    }
+    .backpage{
+        position:fixed;
+        bottom:0;
+        left:10;
+    }
+    #textcenter {
+        text-align: center;
+    }
+    #logo {
+        text-align: right;
+    }
+    #round{
+        border: 2px solid red;
+        border-radius: 8px;
+        height:130px;
+    }
+    .bg {
+        background-image: url("img/ar10.jpg");
+     }
+	.btn-back{
+		 background-image: url( 'img/left.png' );
+		 background-size: 100px 75px;
+		 height: 75px;  
+		 width: 104px;
+		 background-color: white;
+		 border-radius: 10px;
+	}
+	.btn-next{
+		 background-image: url( 'img/right.png' );
+		 background-size: 100px 75px;
+		 height: 75px;  
+		 width: 104px;
+		 background-color: white;
+		 border-radius: 10px;
+	}
+	.btn-o{
+		margin-top:3px;
+		margin-left:10px;
+		border-radius:30px;
+		background:#ffffff;
+		background-image: url( 'img/ok.png' );
+		background-size: 47px 45px;
+		height: 48px;  
+		width: 48px;
+	}
+	.btn-n{
+		margin-top:3px;
+		margin-left:1px;
+		border-radius:30px;
+		background:#ffffff;
+		background-image: url( 'img/nok.png' );
+		background-size: 47px 45px;
+		height: 48px;  
+		width: 48px;
+	}
+</style>
+</head>
+<body onload="init();" class="bg">
+<p id="logo">
+    <img src = "img/arceliklogo.jpg"
+         height = "auto"
+         width = "auto"
+         alt = "Arcelik logo" />
+</p>
+<h1 id="textcenter">TV Information (Step 10)</h1>
+<div class="container-fluid">
+	  <div class="row">
+		<div class="col-sm-1">
+		  <p class="backpage"><button type="button" class="btn btn-back"><a href="FileOperations.html">Back Page</a></button></p>	
+		</div>
+		<div class="col-sm-10"></div>
+		<div class="col-sm-1">  
+		  <p class="nextpage"><button type="button" class="btn btn-next"><a href="TvTime.html">Next Page</a></button></p>
+		</div>
+	  </div>
+</div>
+<div class="icerik">
+	<b>TV Information:</b>
+    <p id="round">
+    <br><label>TVName:</label>
+    <input id="cfe1" value="DS ARCELIK" type="text">
+    <input type="button" value="Set Tv Name" onclick="eventWithCallbackSetTvname(document.getElementById('cfe1').value);">
+    <input type="button" value="Get Tv Name" onclick="eventWithCallbackDemoGetTvname();"><br><br>
+	 <button class="btn btn-o" type="button" onclick="renkDegistir();"></button>
+	 <button class="btn btn-n" type="button" onclick="varsayilanRenk();"></button>
+    </p>
+	<button type="button" onclick="location.reload();">Reload Page</button><br><br>
+    <div id="output"> Waiting for SDK init...</div>
+</div>
+
+</body>
+</html>

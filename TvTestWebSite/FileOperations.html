@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="tr">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+   function init(){
+        var name = sessionStorage.getItem("tempFileOperations");
+		if(name=="OK"){
+		 		renkDegistir();
+		}
+		else if(name=="NOTOK"){
+		 		varsayilanRenk();
+		}
+        outputElem = document.getElementById("output");
+        arSmartTV.init(initSuccessful,initFail);
+    }
+    function initSuccessful(){
+        arSmartTV.addEventListener("EV_SEND_PIXAGE_GENERIC_EVENT", handleIncomingEvent);
+        outputElem.innerHTML="SDK init successful. Please select an operation";
+    }
+    function initFail(){ 
+        outputElem.innerHTML="SDK init failed! You cannot use any function";
+    }
+	
+
+	function eventWithCallbackDemocopy(cpyfilsesrc,cpyfiledst){
+        var msgObj = new Object();
+		msgObj.command = "bCopyFile";
+		msgObj.payload = new Object();
+		msgObj.payload.Source =cpyfilsesrc;
+		msgObj.payload.Destination =cpyfiledst;
+		msgObj.payload.DirectoryFile ="FILE";
+		
+        var response = arSmartTV.sendPixageRequest(msgObj);
+
+        outputElem.innerHTML="request response is received: " + response;
+   }
+   function eventWithCallbackDemolistfile(listdirect){
+        var msgObj = new Object();
+		msgObj.command = "bListFile";
+		msgObj.payload = new Object();
+		msgObj.payload.Path =listdirect;
+		
+        var response = arSmartTV.sendPixageRequest(msgObj);
+
+        outputElem.innerHTML="request response is received: " + response;
+    }
+	function eventWithCallbackDemomove(mvsrc,mvdest){
+        var msgObj = new Object();
+		msgObj.command = "bMoveFile";
+		msgObj.payload = new Object();
+		msgObj.payload.Source =mvsrc;
+		msgObj.payload.Destination =mvdest;
+		
+        var response = arSmartTV.sendPixageRequest(msgObj);
+
+        outputElem.innerHTML="request response is received: " + response;
+    }
+	function eventWithCallbackDemofileexist(drname,fname){
+        var msgObj = new Object();
+		msgObj.command = "bGetFileExist";
+		msgObj.payload = new Object();
+		msgObj.payload.DirectoryName =drname;
+		msgObj.payload.Filename =fname;
+		
+        var response = arSmartTV.sendPixageRequest(msgObj);
+
+        outputElem.innerHTML="request response is received: " + response;
+    }
+		function eventWithCallbackDemodelete(dlfilepath,selectdel){
+        var msgObj = new Object();
+		msgObj.command = "bDeleteFile";
+		msgObj.payload = new Object();
+		msgObj.payload.Source =dlfilepath;
+		msgObj.payload.DirectoryFile =selectdel;
+		
+        var response = arSmartTV.sendPixageRequest(msgObj);
+
+        outputElem.innerHTML="request response is received: " + response;
+   }
+   	function eventWithCallbackDemodirectoryexist(drname){
+        var msgObj = new Object();
+		msgObj.command = "bGetDirectoryExist";
+		msgObj.payload = new Object();
+		msgObj.payload.DirectoryName =drname;
+		
+        var response = arSmartTV.sendPixageRequest(msgObj);
+
+        outputElem.innerHTML="request response is received: " + response;
+    }
+	function eventWithCallbackSetTvname(tvname){
+        var msgObj = new Object();
+		msgObj.command = "bSetTvname";
+		msgObj.payload = new Object();
+		msgObj.payload.tvname =tvname;
+		
+        var response = arSmartTV.sendPixageRequest(msgObj);
+
+        outputElem.innerHTML="request response is received: " + response;
+	}
+	function eventWithCallbackDemoGetTvname(){
+        var msgObj = Object();
+        msgObj.command = "bGetTvname";
+        var response = arSmartTV.sendPixageRequest(msgObj);
+
+        outputElem.innerHTML="request response is received: " + response;
+	}
+	function eventWithCallbackDemowritefile(wrfpath,selectwr,wrdatav){
+        var msgObj = new Object();
+		msgObj.command = "bWriteFile";
+		msgObj.payload = new Object();
+		msgObj.payload.FileNameAndPath =wrfpath;
+		msgObj.payload.Append =selectwr;
+		msgObj.payload.Data =wrdatav;
+		
+        var response = arSmartTV.sendPixageRequest(msgObj);
+
+        outputElem.innerHTML="request response is received: " + response;
+   }
+    function handleIncomingEvent(msg) {
+        outputElem.innerHTML = "An event is received from TV: " + msg;
+    }    
+    function dummyCallback(msg){
+        outputElem.innerHTML = "event response received (success callback): " + msg;
+    }
+    function dummyCallbackErr(msg){
+        outputElem.innerHTML = "event response received (failure callback): " + msg;
+    }
+	function renkDegistir()
+    {
+        document.getElementById("round").style.border="2px solid green";
+		sessionStorage.setItem("tempFileOperations", "OK");
+		eventWithCallbackDemowritefile("/Customer/usb/sda1/testproject/log.txt","APPEND","\r\n9		OK");  	
+    }
+	function varsayilanRenk()
+	{
+		document.getElementById("round").style.border="2px solid red";
+		sessionStorage.setItem("tempFileOperations", "NOTOK");
+		eventWithCallbackDemowritefile("/Customer/usb/sda1/testproject/log.txt","APPEND","\r\n9		NOTOK");
+		}
+</script>
+<style type="text/css">
+body{
+	background-color: white;
+}
+.icerik{
+    float: center;
+	text-align: center;
+}
+#output{
+ float:center;
+}
+.nextpage{
+position:fixed; 
+bottom:0;
+}
+.backpage{
+position:fixed; 
+bottom:0;
+}
+#textcenter {
+	text-align: center;
+}
+#logo {
+	text-align: right;
+}
+#round{
+	border: 2px solid red;
+	border-radius: 8px;
+	height:410px;
+}
+.bg {
+        background-image: url("img/ar09.jpg");    
+     }
+	.btn-back{
+		 background-image: url( 'img/left.png' );
+		 background-size: 100px 75px;
+		 height: 75px;  
+		 width: 104px;
+		 background-color: white;
+		 border-radius: 10px;
+	}
+	.btn-next{
+		 background-image: url( 'img/right.png' );
+		 background-size: 100px 75px;
+		 height: 75px;  
+		 width: 104px;
+		 background-color: white;
+		 border-radius: 10px;
+	}
+	.btn-o{
+		margin-top:3px;
+		margin-left:10px;
+		border-radius:30px;
+		background:#ffffff;
+		background-image: url( 'img/ok.png' );
+		background-size: 47px 45px;
+		height: 48px;  
+		width: 48px;
+	}
+	.btn-n{
+		margin-top:3px;
+		margin-left:1px;
+		border-radius:30px;
+		background:#ffffff;
+		background-image: url( 'img/nok.png' );
+		background-size: 47px 45px;
+		height: 48px;  
+		width: 48px;
+	}
+</style>
+</head>
+<body onload="init();" class="bg">
+  <p id="logo">
+		<img src = "img/arceliklogo.jpg"
+		height = "auto"
+		width = "auto"
+		alt = "Arcelik logo" />
+	</p>
+	<h1 id="textcenter">File Operations (Step 9)</h1>
+<div class="container-fluid">
+	  <div class="row">
+		<div class="col-sm-1">
+		  <p class="backpage"><button type="button" class="btn btn-back"><a href="2StorageSize.html">Back Page</a></button></p>	
+		</div>
+		<div class="col-sm-10"></div>
+		<div class="col-sm-1">  
+		  <p class="nextpage"><button type="button" class="btn btn-next"><a href="TvInfo.html">Next Page</a></button></p>
+		</div>
+	  </div>
+</div>
+  <div class="icerik">
+	  <b>File Operations:</b>
+	  <p id="round">
+  				<label style="margin-top:25px;">FilepathSource:</label>
+				<input id="cpyfpathsrc" value="/Customer/usb/sda1/turkcell.c" type="text">
+				<label>FilepathDestination:</label>
+				<input id="cpyfpathdst" value="/Customer/usb/sda1/turkcell.c" type="text">
+				<input type="button" value="File Copy" onclick="eventWithCallbackDemocopy(document.getElementById('cpyfpathsrc').value,document.getElementById('cpyfpathdst').value)"><br><br>
+				<label>Directory:</label>
+				<input id="listfile" value="/Customer/usb/sda1/turkcell.c" type="text">
+				<input type="button" value="List File" onclick="eventWithCallbackDemolistfile(document.getElementById('listfile').value)"><br><br>
+				<label>FilepathSource:</label>
+				<input id="rnmfpathsrc" value="/Customer/usb/sda1/turkcell.c" type="text">
+				<label>FilepathDestination:</label>
+				<input id="rnmfpathdst" value="/Customer/usb/sda1/turkcell.c" type="text">
+				<input type="button" value="File move" onclick="eventWithCallbackDemomove(document.getElementById('rnmfpathsrc').value,document.getElementById('rnmfpathdst').value)"><br><br>
+				<label>DirectoryName:</label>
+				<input id="filexistdirname" value="/Customer/usb/sda1/turkcell.c" type="text">
+				<label>FileName:</label>
+				<input id="filexistfname" value="/Customer/usb/sda1/turkcell.c" type="text">
+				<input type="button" value="Exist File" onclick="eventWithCallbackDemofileexist(document.getElementById('filexistdirname').value,document.getElementById('filexistfname').value)"><br><br>
+				<label>Filepath:</label>
+				<input id="delfpath" value="/Customer/usb/sda1/turkcell.c" type="text">
+				<label>DeletefileorDirectory:</label>
+				<select id="dlstatus" name="selectdel">
+					<option value="FILE">FILE</option>
+					<option value="DIRECTORY">DIRECTORY</option>
+				</select>
+				<input type="button" value="File Delete" onclick="eventWithCallbackDemodelete(document.getElementById('delfpath').value,(document.getElementById('dlstatus').options[document.getElementById('dlstatus').selectedIndex]).value)"><br><br>
+								<label>Directory:</label>
+				<input id="direcexist" value="/Customer/usb/sda1/turkcell.c" type="text">
+				<input type="button" value="Exist Directory" onclick="eventWithCallbackDemodirectoryexist(document.getElementById('direcexist').value)"><br><br>
+				<button class="btn btn-o" type="button" onclick="renkDegistir();"></button>
+				<button class="btn btn-n" type="button" onclick="varsayilanRenk();"></button>
+	  </p>
+	<button type="button" onclick="location.reload();">Reload Page</button><br><br>
+	<div id="output"> Waiting for SDK init...</div>
+  </div>
+
+</body>
+</html>
